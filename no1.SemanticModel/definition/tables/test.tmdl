@@ -1,0 +1,31 @@
+table test
+	lineageTag: 37a49ceb-bc4f-4235-8f68-945a3ebeed55
+
+	measure Revenue = SUM(SalesDetails[SalesAmount])
+		lineageTag: 92495c90-3232-4017-add0-f9a0473e7bf1
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure Cost = SUMX(SalesDetails,SalesDetails[UnitCost]*SalesDetails[OrderQuantity])
+		lineageTag: 391a6aa4-5bb5-4acc-a8ce-4e04d7d790e9
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure Profit = [Revenue]-[Cost]
+		lineageTag: 76bb04e1-1846-4e39-b8eb-78dd0fdd35df
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	partition test = m
+		mode: import
+		source =
+				let
+				    Source = Table.FromRows(Json.Document(Binary.Decompress(Binary.FromText("i44FAA==", BinaryEncoding.Base64), Compression.Deflate)), let _t = ((type nullable text) meta [Serialized.Text = true]) in type table [Column1 = _t]),
+				    #"Changed Type" = Table.TransformColumnTypes(Source,{{"Column1", type text}}),
+				    #"Renamed Columns" = Table.RenameColumns(#"Changed Type",{{"Column1", "profit"}}),
+				    #"Removed Columns" = Table.RemoveColumns(#"Renamed Columns",{"profit"})
+				in
+				    #"Removed Columns"
+
+	annotation PBI_ResultType = Table
+

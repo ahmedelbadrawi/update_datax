@@ -31,7 +31,7 @@ table SalesDetails
 		dataType: int64
 		formatString: 0
 		lineageTag: 8b5f294e-a2c9-4c40-b695-5a99f052f0f4
-		summarizeBy: count
+		summarizeBy: none
 		sourceColumn: ProductKey
 
 		annotation SummarizationSetBy = Automatic
@@ -81,7 +81,14 @@ table SalesDetails
 		summarizeBy: none
 		sourceColumn: OrderDate
 
+		variation Variation
+			isDefault
+			relationship: 1a1754bb-d5ea-4331-ac53-048a1162ee15
+			defaultHierarchy: LocalDateTable_96357d4c-38bb-4003-b731-81dd5df84179.'Date Hierarchy'
+
 		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
 
 	column DueDate
 		dataType: dateTime
@@ -90,7 +97,14 @@ table SalesDetails
 		summarizeBy: none
 		sourceColumn: DueDate
 
+		variation Variation
+			isDefault
+			relationship: 5f24f691-0391-458d-9aef-2507345a7a8f
+			defaultHierarchy: LocalDateTable_cc566a9a-0bf1-40dd-8e9e-e05215e4a4fd.'Date Hierarchy'
+
 		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
 
 	column ShipDate
 		dataType: dateTime
@@ -99,13 +113,20 @@ table SalesDetails
 		summarizeBy: none
 		sourceColumn: ShipDate
 
+		variation Variation
+			isDefault
+			relationship: 4c35f782-3ae0-4869-b83b-21a0bbe64090
+			defaultHierarchy: LocalDateTable_090a4770-1275-4163-ba02-4581ead267a3.'Date Hierarchy'
+
 		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
 
 	column CustomerKey
 		dataType: int64
 		formatString: 0
 		lineageTag: 80a4b66f-d19e-4704-bc62-49e1c1e881af
-		summarizeBy: count
+		summarizeBy: none
 		sourceColumn: CustomerKey
 
 		annotation SummarizationSetBy = Automatic
@@ -168,7 +189,7 @@ table SalesDetails
 		dataType: int64
 		formatString: 0
 		lineageTag: 1d3f8fda-3b92-4ae6-b560-2fa2f5474b47
-		summarizeBy: count
+		summarizeBy: sum
 		sourceColumn: Year
 
 		annotation SummarizationSetBy = Automatic
@@ -177,7 +198,7 @@ table SalesDetails
 		dataType: int64
 		formatString: 0
 		lineageTag: 9e3f7f34-2c15-4864-ba2b-c403c9b4f842
-		summarizeBy: count
+		summarizeBy: sum
 		sourceColumn: Month
 
 		annotation SummarizationSetBy = Automatic
@@ -195,27 +216,28 @@ table SalesDetails
 	partition SalesDetails = m
 		mode: import
 		source =
-			let
-				Source = Excel.Workbook(File.Contents("D:\work\projects\data x projects\New folder\ROW_DATA.xlsx"), null, true),
-				SalesDetails_Table = Source{[Item="SalesDetails",Kind="Table"]}[Data],
-				#"Changed Type" = Table.TransformColumnTypes(SalesDetails_Table,{{"SalesDetailsKey", Int64.Type}, {"SalesHeaderKey", Int64.Type}, {"SalesOrderNumber", type text}, {"ProductKey", Int64.Type}, {"ProductSubcategoryKey", Int64.Type}, {"OrderQuantity", Int64.Type}, {"UnitPrice", type number}, {"ExtendedAmount", type number}}),
-				SalesHeader_Table = Source{[Item="SalesHeader",Kind="Table"]}[Data],
-				#"Changed Type SalesHeader" = Table.TransformColumnTypes(SalesHeader_Table,{{"SalesHeaderKey", Int64.Type}, {"SalesOrderNumber", type text}, {"OrderDate", type date}, {"DueDate", type date}, {"ShipDate", type date}, {"CustomerKey", Int64.Type}, {"RegionKey", Int64.Type}, {"DiscountAmount", type number}, {"TotalAmount", type number}, {"SalesAmount", type number}}),
-				#"Merged SalesHeader" = Table.NestedJoin(#"Changed Type", {"SalesOrderNumber"}, #"Changed Type SalesHeader", {"SalesOrderNumber"}, "SalesHeader", JoinKind.LeftOuter),
-				#"Expanded SalesHeader" = Table.ExpandTableColumn(#"Merged SalesHeader", "SalesHeader", {"OrderDate","DueDate","ShipDate","CustomerKey","RegionKey","DiscountAmount","TotalAmount","SalesAmount"}, {"OrderDate","DueDate","ShipDate","CustomerKey","RegionKey","DiscountAmount","TotalAmount","SalesAmount"}),
-				Customer_Table = Source{[Item="Customer",Kind="Table"]}[Data],
-				#"Changed Type Customer" = Table.TransformColumnTypes(Customer_Table,{{"CustomerKey", Int64.Type}, {"GeographyKey", Int64.Type}, {"BusinessType", type text}, {"Customer", type text}, {"NumberEmployees", Int64.Type}, {"AnnualRevenue", Int64.Type}, {"YearOpened", Int64.Type}}),
-				#"Merged Customer" = Table.NestedJoin(#"Expanded SalesHeader", {"CustomerKey"}, #"Changed Type Customer", {"CustomerKey"}, "Customer", JoinKind.LeftOuter),
-				#"Expanded Customer" = Table.ExpandTableColumn(#"Merged Customer", "Customer", {"GeographyKey"}, {"GeographyKey"}),
-				Geography_Table = Source{[Item="Geography",Kind="Table"]}[Data],
-				#"Changed Type Geography" = Table.TransformColumnTypes(Geography_Table,{{"GeographyKey", Int64.Type}, {"CountryCode", type text}}),
-				#"Merged Geography" = Table.NestedJoin(#"Expanded Customer", {"GeographyKey"}, #"Changed Type Geography", {"GeographyKey"}, "Geography", JoinKind.LeftOuter),
-				#"Expanded Geography" = Table.ExpandTableColumn(#"Merged Geography", "Geography", {"CountryCode"}, {"CountryCode"}),
-				#"Added Year" = Table.AddColumn(#"Expanded Geography", "Year", each Date.Year([OrderDate]), Int64.Type),
-				#"Added Month" = Table.AddColumn(#"Added Year", "Month", each Date.Month([OrderDate]), Int64.Type),
-				ProductCostHistory_Table = Source{[Item="ProductCostHistory",Kind="Table"]}[Data],
-				#"Changed Type ProductCostHistory" = Table.TransformColumnTypes(ProductCostHistory_Table,{{"Year", Int64.Type}, {"MonthNo", Int64.Type}, {"CountryCode", type text}, {"ProductKey", Int64.Type}, {"UnitCost", type number}}),
-				#"Merged ProductCostHistory" = Table.NestedJoin(#"Added Month", {"Year","Month","CountryCode","ProductKey"}, #"Changed Type ProductCostHistory", {"Year","MonthNo","CountryCode","ProductKey"}, "ProductCostHistory", JoinKind.LeftOuter),
-				#"Expanded ProductCostHistory" = Table.ExpandTableColumn(#"Merged ProductCostHistory", "ProductCostHistory", {"UnitCost"}, {"UnitCost"})
-			in
-			#"Expanded ProductCostHistory"
+				let
+					Source = Excel.Workbook(File.Contents("D:\work\projects\data x projects\New folder\ROW_DATA.xlsx"), null, true),
+					SalesDetails_Table = Source{[Item="SalesDetails",Kind="Table"]}[Data],
+					#"Changed Type" = Table.TransformColumnTypes(SalesDetails_Table,{{"SalesDetailsKey", Int64.Type}, {"SalesHeaderKey", Int64.Type}, {"SalesOrderNumber", type text}, {"ProductKey", Int64.Type}, {"ProductSubcategoryKey", Int64.Type}, {"OrderQuantity", Int64.Type}, {"UnitPrice", type number}, {"ExtendedAmount", type number}}),
+					SalesHeader_Table = Source{[Item="SalesHeader",Kind="Table"]}[Data],
+					#"Changed Type SalesHeader" = Table.TransformColumnTypes(SalesHeader_Table,{{"SalesHeaderKey", Int64.Type}, {"SalesOrderNumber", type text}, {"OrderDate", type date}, {"DueDate", type date}, {"ShipDate", type date}, {"CustomerKey", Int64.Type}, {"RegionKey", Int64.Type}, {"DiscountAmount", type number}, {"TotalAmount", type number}, {"SalesAmount", type number}}),
+					#"Merged SalesHeader" = Table.NestedJoin(#"Changed Type", {"SalesOrderNumber"}, #"Changed Type SalesHeader", {"SalesOrderNumber"}, "SalesHeader", JoinKind.LeftOuter),
+					#"Expanded SalesHeader" = Table.ExpandTableColumn(#"Merged SalesHeader", "SalesHeader", {"OrderDate","DueDate","ShipDate","CustomerKey","RegionKey","DiscountAmount","TotalAmount","SalesAmount"}, {"OrderDate","DueDate","ShipDate","CustomerKey","RegionKey","DiscountAmount","TotalAmount","SalesAmount"}),
+					Customer_Table = Source{[Item="Customer",Kind="Table"]}[Data],
+					#"Changed Type Customer" = Table.TransformColumnTypes(Customer_Table,{{"CustomerKey", Int64.Type}, {"GeographyKey", Int64.Type}, {"BusinessType", type text}, {"Customer", type text}, {"NumberEmployees", Int64.Type}, {"AnnualRevenue", Int64.Type}, {"YearOpened", Int64.Type}}),
+					#"Merged Customer" = Table.NestedJoin(#"Expanded SalesHeader", {"CustomerKey"}, #"Changed Type Customer", {"CustomerKey"}, "Customer", JoinKind.LeftOuter),
+					#"Expanded Customer" = Table.ExpandTableColumn(#"Merged Customer", "Customer", {"GeographyKey"}, {"GeographyKey"}),
+					Geography_Table = Source{[Item="Geography",Kind="Table"]}[Data],
+					#"Changed Type Geography" = Table.TransformColumnTypes(Geography_Table,{{"GeographyKey", Int64.Type}, {"CountryCode", type text}}),
+					#"Merged Geography" = Table.NestedJoin(#"Expanded Customer", {"GeographyKey"}, #"Changed Type Geography", {"GeographyKey"}, "Geography", JoinKind.LeftOuter),
+					#"Expanded Geography" = Table.ExpandTableColumn(#"Merged Geography", "Geography", {"CountryCode"}, {"CountryCode"}),
+					#"Added Year" = Table.AddColumn(#"Expanded Geography", "Year", each Date.Year([OrderDate]), Int64.Type),
+					#"Added Month" = Table.AddColumn(#"Added Year", "Month", each Date.Month([OrderDate]), Int64.Type),
+					ProductCostHistory_Table = Source{[Item="ProductCostHistory",Kind="Table"]}[Data],
+					#"Changed Type ProductCostHistory" = Table.TransformColumnTypes(ProductCostHistory_Table,{{"Year", Int64.Type}, {"MonthNo", Int64.Type}, {"CountryCode", type text}, {"ProductKey", Int64.Type}, {"UnitCost", type number}}),
+					#"Merged ProductCostHistory" = Table.NestedJoin(#"Added Month", {"Year","Month","CountryCode","ProductKey"}, #"Changed Type ProductCostHistory", {"Year","MonthNo","CountryCode","ProductKey"}, "ProductCostHistory", JoinKind.LeftOuter),
+					#"Expanded ProductCostHistory" = Table.ExpandTableColumn(#"Merged ProductCostHistory", "ProductCostHistory", {"UnitCost"}, {"UnitCost"})
+				in
+				#"Expanded ProductCostHistory"
+

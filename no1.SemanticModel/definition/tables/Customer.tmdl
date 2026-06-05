@@ -5,7 +5,7 @@ table Customer
 		dataType: int64
 		formatString: 0
 		lineageTag: 886433da-823f-49be-85e0-56260f4666db
-		summarizeBy: count
+		summarizeBy: none
 		sourceColumn: CustomerKey
 
 		annotation SummarizationSetBy = Automatic
@@ -118,20 +118,30 @@ table Customer
 
 		annotation SummarizationSetBy = Automatic
 
+	column RegionKey
+		dataType: int64
+		formatString: 0
+		lineageTag: 9677c8b5-07af-43b7-8ffb-79354a595d9b
+		summarizeBy: none
+		sourceColumn: RegionKey
+
+		annotation SummarizationSetBy = Automatic
+
 	partition Customer = m
 		mode: import
 		source =
-			let
-				Source = Excel.Workbook(File.Contents("D:\work\projects\data x projects\New folder\ROW_DATA.xlsx"), null, true),
-				Customer_Table = Source{[Item="Customer",Kind="Table"]}[Data],
-				#"Changed Type" = Table.TransformColumnTypes(Customer_Table,{{"CustomerKey", Int64.Type}, {"GeographyKey", Int64.Type}, {"BusinessType", type text}, {"Customer", type text}, {"NumberEmployees", Int64.Type}, {"AnnualRevenue", Int64.Type}, {"YearOpened", Int64.Type}}),
-				Geography_Table = Source{[Item="Geography",Kind="Table"]}[Data],
-				#"Changed Type Geography" = Table.TransformColumnTypes(Geography_Table,{{"GeographyKey", Int64.Type}, {"CityName", type text}, {"StateCode", type text}, {"StateName", type text}, {"CountryCode", type text}, {"CountryName", type text}, {"RegionKey", Int64.Type}}),
-				#"Merged Geography" = Table.NestedJoin(#"Changed Type", {"GeographyKey"}, #"Changed Type Geography", {"GeographyKey"}, "Geography", JoinKind.LeftOuter),
-				#"Expanded Geography" = Table.ExpandTableColumn(#"Merged Geography", "Geography", {"CityName","StateCode","StateName","CountryCode","CountryName","RegionKey"}, {"CityName","StateCode","StateName","CountryCode","CountryName","RegionKey"}),
-				Region_Table = Source{[Item="Region",Kind="Table"]}[Data],
-				#"Changed Type Region" = Table.TransformColumnTypes(Region_Table,{{"RegionKey", Int64.Type}, {"Region", type text}, {"Country", type text}, {"Continent", type text}}),
-				#"Merged Region" = Table.NestedJoin(#"Expanded Geography", {"RegionKey"}, #"Changed Type Region", {"RegionKey"}, "Region", JoinKind.LeftOuter),
-				#"Expanded Region" = Table.ExpandTableColumn(#"Merged Region", "Region", {"Region","Continent"}, {"Region","Continent"})
-			in
-				#"Expanded Region"
+				let
+					Source = Excel.Workbook(File.Contents("D:\work\projects\data x projects\New folder\ROW_DATA.xlsx"), null, true),
+					Customer_Table = Source{[Item="Customer",Kind="Table"]}[Data],
+					#"Changed Type" = Table.TransformColumnTypes(Customer_Table,{{"CustomerKey", Int64.Type}, {"GeographyKey", Int64.Type}, {"BusinessType", type text}, {"Customer", type text}, {"NumberEmployees", Int64.Type}, {"AnnualRevenue", Int64.Type}, {"YearOpened", Int64.Type}}),
+					Geography_Table = Source{[Item="Geography",Kind="Table"]}[Data],
+					#"Changed Type Geography" = Table.TransformColumnTypes(Geography_Table,{{"GeographyKey", Int64.Type}, {"CityName", type text}, {"StateCode", type text}, {"StateName", type text}, {"CountryCode", type text}, {"CountryName", type text}, {"RegionKey", Int64.Type}}),
+					#"Merged Geography" = Table.NestedJoin(#"Changed Type", {"GeographyKey"}, #"Changed Type Geography", {"GeographyKey"}, "Geography", JoinKind.LeftOuter),
+					#"Expanded Geography" = Table.ExpandTableColumn(#"Merged Geography", "Geography", {"CityName","StateCode","StateName","CountryCode","CountryName","RegionKey"}, {"CityName","StateCode","StateName","CountryCode","CountryName","RegionKey"}),
+					Region_Table = Source{[Item="Region",Kind="Table"]}[Data],
+					#"Changed Type Region" = Table.TransformColumnTypes(Region_Table,{{"RegionKey", Int64.Type}, {"Region", type text}, {"Country", type text}, {"Continent", type text}}),
+					#"Merged Region" = Table.NestedJoin(#"Expanded Geography", {"RegionKey"}, #"Changed Type Region", {"RegionKey"}, "Region", JoinKind.LeftOuter),
+					#"Expanded Region" = Table.ExpandTableColumn(#"Merged Region", "Region", {"Region","Continent"}, {"Region","Continent"})
+				in
+					#"Expanded Region"
+

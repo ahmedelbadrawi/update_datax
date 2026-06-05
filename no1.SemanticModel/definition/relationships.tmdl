@@ -39,3 +39,22 @@ relationship 8186d2fe-8421-4fea-b1df-7f2b91c3b66a
 	fromColumn: SalesDetails.CustomerKey
 	toColumn: Customer.CustomerKey
 
+relationship 1a1754bb-d5ea-4331-ac53-048a1162ee15
+	joinOnDateBehavior: datePartOnly
+	fromColumn: SalesDetails.OrderDate
+	toColumn: LocalDateTable_96357d4c-38bb-4003-b731-81dd5df84179.Date
+
+relationship 5f24f691-0391-458d-9aef-2507345a7a8f
+	joinOnDateBehavior: datePartOnly
+	fromColumn: SalesDetails.DueDate
+	toColumn: LocalDateTable_cc566a9a-0bf1-40dd-8e9e-e05215e4a4fd.Date
+
+relationship 4c35f782-3ae0-4869-b83b-21a0bbe64090
+	joinOnDateBehavior: datePartOnly
+	fromColumn: SalesDetails.ShipDate
+	toColumn: LocalDateTable_090a4770-1275-4163-ba02-4581ead267a3.Date
+
+relationship 89163943-3e5b-fc2b-2dcb-9bcff648021c
+	fromColumn: Customer.RegionKey
+	toColumn: Region.RegionKey
+

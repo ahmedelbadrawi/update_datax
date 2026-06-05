@@ -8,7 +8,7 @@ model Model
 
 annotation __PBI_TimeIntelligenceEnabled = 1
 
-annotation PBI_QueryOrder = ["Customer","Geography","Product","ProductCostHistory","ProductSubcategory","Region","SalesDetails","SalesHeader","SalesReturns"]
+annotation PBI_QueryOrder = ["Customer","Geography","Product","ProductCostHistory","ProductSubcategory","Region","SalesDetails","SalesHeader","SalesReturns","test"]
 
 annotation PBI_ProTooling = ["DevMode","TMDL-Extension"]
 
@@ -27,6 +27,10 @@ ref table LocalDateTable_48c1b41e-6b15-4848-bd06-707a7e72c3f4
 ref table SalesReturns
 ref table LocalDateTable_4d6012b8-7bf2-4228-90d9-1d1629c1b93f
 ref table LocalDateTable_5a1ff29e-47e4-45a0-b193-de94024a258f
+ref table LocalDateTable_96357d4c-38bb-4003-b731-81dd5df84179
+ref table LocalDateTable_cc566a9a-0bf1-40dd-8e9e-e05215e4a4fd
+ref table LocalDateTable_090a4770-1275-4163-ba02-4581ead267a3
+ref table test
 
 ref cultureInfo en-US
 

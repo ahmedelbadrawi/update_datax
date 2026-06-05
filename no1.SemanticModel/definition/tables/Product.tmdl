@@ -62,13 +62,14 @@ table Product
 	partition Product = m
 		mode: import
 		source =
-			let
-				Source = Excel.Workbook(File.Contents("D:\work\projects\data x projects\New folder\ROW_DATA.xlsx"), null, true),
-				Product_Table = Source{[Item="Product",Kind="Table"]}[Data],
-				#"Changed Type" = Table.TransformColumnTypes(Product_Table,{{"ProductKey", Int64.Type}, {"ProductSubcategoryKey", Int64.Type}, {"ProductName", type text}, {"Size", type text}, {"Detail", type text}}),
-				ProductSubcategory_Table = Source{[Item="ProductSubcategory",Kind="Table"]}[Data],
-				#"Changed Type ProductSubcategory" = Table.TransformColumnTypes(ProductSubcategory_Table,{{"ProductSubcategoryKey", Int64.Type}, {"SubcategoryName", type text}, {"CategoryName", type text}}),
-				#"Merged ProductSubcategory" = Table.NestedJoin(#"Changed Type", {"ProductSubcategoryKey"}, #"Changed Type ProductSubcategory", {"ProductSubcategoryKey"}, "ProductSubcategory", JoinKind.LeftOuter),
-				#"Expanded ProductSubcategory" = Table.ExpandTableColumn(#"Merged ProductSubcategory", "ProductSubcategory", {"SubcategoryName", "CategoryName"}, {"SubcategoryName", "CategoryName"})
-			in
-				#"Expanded ProductSubcategory"
+				let
+					Source = Excel.Workbook(File.Contents("D:\work\projects\data x projects\New folder\ROW_DATA.xlsx"), null, true),
+					Product_Table = Source{[Item="Product",Kind="Table"]}[Data],
+					#"Changed Type" = Table.TransformColumnTypes(Product_Table,{{"ProductKey", Int64.Type}, {"ProductSubcategoryKey", Int64.Type}, {"ProductName", type text}, {"Size", type text}, {"Detail", type text}}),
+					ProductSubcategory_Table = Source{[Item="ProductSubcategory",Kind="Table"]}[Data],
+					#"Changed Type ProductSubcategory" = Table.TransformColumnTypes(ProductSubcategory_Table,{{"ProductSubcategoryKey", Int64.Type}, {"SubcategoryName", type text}, {"CategoryName", type text}}),
+					#"Merged ProductSubcategory" = Table.NestedJoin(#"Changed Type", {"ProductSubcategoryKey"}, #"Changed Type ProductSubcategory", {"ProductSubcategoryKey"}, "ProductSubcategory", JoinKind.LeftOuter),
+					#"Expanded ProductSubcategory" = Table.ExpandTableColumn(#"Merged ProductSubcategory", "ProductSubcategory", {"SubcategoryName", "CategoryName"}, {"SubcategoryName", "CategoryName"})
+				in
+					#"Expanded ProductSubcategory"
+
