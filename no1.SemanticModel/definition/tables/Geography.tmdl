@@ -1,0 +1,73 @@
+table Geography
+	lineageTag: 59c63d4f-8d39-444f-b5f3-c963d0efba3c
+
+	column GeographyKey
+		dataType: int64
+		formatString: 0
+		lineageTag: 27e5a6a0-9f69-4598-8a39-d8cfec540fe8
+		summarizeBy: count
+		sourceColumn: GeographyKey
+
+		annotation SummarizationSetBy = Automatic
+
+	column CityName
+		dataType: string
+		lineageTag: 00c3ad59-5d64-482e-8158-cb7e53bc12ac
+		summarizeBy: none
+		sourceColumn: CityName
+
+		annotation SummarizationSetBy = Automatic
+
+	column StateCode
+		dataType: string
+		lineageTag: 71c837b1-92cb-4345-9a4d-eb3256da98ac
+		summarizeBy: none
+		sourceColumn: StateCode
+
+		annotation SummarizationSetBy = Automatic
+
+	column StateName
+		dataType: string
+		lineageTag: d0713bb2-14bf-4ecf-99bc-251ec76ad265
+		summarizeBy: none
+		sourceColumn: StateName
+
+		annotation SummarizationSetBy = Automatic
+
+	column CountryCode
+		dataType: string
+		lineageTag: a7c3e952-1148-40ab-9513-56fd77e79001
+		summarizeBy: none
+		sourceColumn: CountryCode
+
+		annotation SummarizationSetBy = Automatic
+
+	column CountryName
+		dataType: string
+		lineageTag: e402f45b-44a2-4a80-a03f-95b18b5f1fbb
+		summarizeBy: none
+		sourceColumn: CountryName
+
+		annotation SummarizationSetBy = Automatic
+
+	column RegionKey
+		dataType: int64
+		formatString: 0
+		lineageTag: 23531bb4-7343-4542-ab8c-7b8a3ef2a8fc
+		summarizeBy: count
+		sourceColumn: RegionKey
+
+		annotation SummarizationSetBy = Automatic
+
+	partition Geography = m
+		mode: import
+		source =
+				let
+				    Source = Excel.Workbook(File.Contents("D:\work\projects\data x projects\New folder\ROW_DATA.xlsx"), null, true),
+				    Geography_Table = Source{[Item="Geography",Kind="Table"]}[Data],
+				    #"Changed Type" = Table.TransformColumnTypes(Geography_Table,{{"GeographyKey", Int64.Type}, {"CityName", type text}, {"StateCode", type text}, {"StateName", type text}, {"CountryCode", type text}, {"CountryName", type text}, {"RegionKey", Int64.Type}})
+				in
+				    #"Changed Type"
+
+	annotation PBI_ResultType = Table
+

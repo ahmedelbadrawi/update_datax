@@ -1,0 +1,137 @@
+table Customer
+	lineageTag: 35ac6bc0-e68d-498a-bc10-12b840ab6ede
+
+	column CustomerKey
+		dataType: int64
+		formatString: 0
+		lineageTag: 886433da-823f-49be-85e0-56260f4666db
+		summarizeBy: count
+		sourceColumn: CustomerKey
+
+		annotation SummarizationSetBy = Automatic
+
+	column GeographyKey
+		dataType: int64
+		formatString: 0
+		lineageTag: 7a978ec5-ad30-4f46-aba3-fbf854008e3d
+		summarizeBy: count
+		sourceColumn: GeographyKey
+
+		annotation SummarizationSetBy = Automatic
+
+	column BusinessType
+		dataType: string
+		lineageTag: e802c675-58c9-4648-8ad7-0d47ea494b8b
+		summarizeBy: none
+		sourceColumn: BusinessType
+
+		annotation SummarizationSetBy = Automatic
+
+	column Customer
+		dataType: string
+		lineageTag: 8392cf62-803b-47ff-92b5-6aec65813187
+		summarizeBy: none
+		sourceColumn: Customer
+
+		annotation SummarizationSetBy = Automatic
+
+	column NumberEmployees
+		dataType: int64
+		formatString: 0
+		lineageTag: ffb4e541-88d4-44f9-8d8e-44cae76699c6
+		summarizeBy: sum
+		sourceColumn: NumberEmployees
+
+		annotation SummarizationSetBy = Automatic
+
+	column AnnualRevenue
+		dataType: int64
+		formatString: 0
+		lineageTag: 201ba7c4-f669-4bba-a54d-2a43c6183eea
+		summarizeBy: sum
+		sourceColumn: AnnualRevenue
+
+		annotation SummarizationSetBy = Automatic
+
+	column YearOpened
+		dataType: int64
+		formatString: 0
+		lineageTag: 23ffb5c2-5af4-406f-81e5-04c3ba2bb374
+		summarizeBy: sum
+		sourceColumn: YearOpened
+
+		annotation SummarizationSetBy = Automatic
+
+	column CityName
+		dataType: string
+		lineageTag: d1d82c9b-a914-4fe0-b1f1-5f8f8c3e520f
+		summarizeBy: none
+		sourceColumn: CityName
+
+		annotation SummarizationSetBy = Automatic
+
+	column StateCode
+		dataType: string
+		lineageTag: c2b7d3f7-3b59-4a8d-a8d7-8d6f7dbe8a10
+		summarizeBy: none
+		sourceColumn: StateCode
+
+		annotation SummarizationSetBy = Automatic
+
+	column StateName
+		dataType: string
+		lineageTag: 8d1f5f34-1f89-49d5-9023-e0c72b421925
+		summarizeBy: none
+		sourceColumn: StateName
+
+		annotation SummarizationSetBy = Automatic
+
+	column CountryCode
+		dataType: string
+		lineageTag: 1f7a4c72-0c49-4f78-9dbe-3dc6f4c2f4c1
+		summarizeBy: none
+		sourceColumn: CountryCode
+
+		annotation SummarizationSetBy = Automatic
+
+	column CountryName
+		dataType: string
+		lineageTag: 4b3f7d05-5b32-4f80-9dfd-1d0b3f080e52
+		summarizeBy: none
+		sourceColumn: CountryName
+
+		annotation SummarizationSetBy = Automatic
+
+	column Region
+		dataType: string
+		lineageTag: 8de3dfa1-036a-4b8d-b1d8-0932b384d0bc
+		summarizeBy: none
+		sourceColumn: Region
+
+		annotation SummarizationSetBy = Automatic
+
+	column Continent
+		dataType: string
+		lineageTag: 791d8f59-9cab-4c57-9710-1ba7efb8c7f4
+		summarizeBy: none
+		sourceColumn: Continent
+
+		annotation SummarizationSetBy = Automatic
+
+	partition Customer = m
+		mode: import
+		source =
+			let
+				Source = Excel.Workbook(File.Contents("D:\work\projects\data x projects\New folder\ROW_DATA.xlsx"), null, true),
+				Customer_Table = Source{[Item="Customer",Kind="Table"]}[Data],
+				#"Changed Type" = Table.TransformColumnTypes(Customer_Table,{{"CustomerKey", Int64.Type}, {"GeographyKey", Int64.Type}, {"BusinessType", type text}, {"Customer", type text}, {"NumberEmployees", Int64.Type}, {"AnnualRevenue", Int64.Type}, {"YearOpened", Int64.Type}}),
+				Geography_Table = Source{[Item="Geography",Kind="Table"]}[Data],
+				#"Changed Type Geography" = Table.TransformColumnTypes(Geography_Table,{{"GeographyKey", Int64.Type}, {"CityName", type text}, {"StateCode", type text}, {"StateName", type text}, {"CountryCode", type text}, {"CountryName", type text}, {"RegionKey", Int64.Type}}),
+				#"Merged Geography" = Table.NestedJoin(#"Changed Type", {"GeographyKey"}, #"Changed Type Geography", {"GeographyKey"}, "Geography", JoinKind.LeftOuter),
+				#"Expanded Geography" = Table.ExpandTableColumn(#"Merged Geography", "Geography", {"CityName","StateCode","StateName","CountryCode","CountryName","RegionKey"}, {"CityName","StateCode","StateName","CountryCode","CountryName","RegionKey"}),
+				Region_Table = Source{[Item="Region",Kind="Table"]}[Data],
+				#"Changed Type Region" = Table.TransformColumnTypes(Region_Table,{{"RegionKey", Int64.Type}, {"Region", type text}, {"Country", type text}, {"Continent", type text}}),
+				#"Merged Region" = Table.NestedJoin(#"Expanded Geography", {"RegionKey"}, #"Changed Type Region", {"RegionKey"}, "Region", JoinKind.LeftOuter),
+				#"Expanded Region" = Table.ExpandTableColumn(#"Merged Region", "Region", {"Region","Continent"}, {"Region","Continent"})
+			in
+				#"Expanded Region"

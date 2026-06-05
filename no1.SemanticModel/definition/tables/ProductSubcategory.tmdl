@@ -1,0 +1,40 @@
+table ProductSubcategory
+	lineageTag: 84f54dc8-b0c3-4183-b199-412f2ea3d246
+
+	column ProductSubcategoryKey
+		dataType: int64
+		formatString: 0
+		lineageTag: 0e469fb8-8241-46ad-96f2-531d09acdd26
+		summarizeBy: count
+		sourceColumn: ProductSubcategoryKey
+
+		annotation SummarizationSetBy = Automatic
+
+	column SubcategoryName
+		dataType: string
+		lineageTag: 15ba2de0-5ae8-4463-adb4-2edf1e991b45
+		summarizeBy: none
+		sourceColumn: SubcategoryName
+
+		annotation SummarizationSetBy = Automatic
+
+	column CategoryName
+		dataType: string
+		lineageTag: 5ec3a5d3-c514-4cc9-b1c3-ad430e7d2cb8
+		summarizeBy: none
+		sourceColumn: CategoryName
+
+		annotation SummarizationSetBy = Automatic
+
+	partition ProductSubcategory = m
+		mode: import
+		source =
+				let
+				    Source = Excel.Workbook(File.Contents("D:\work\projects\data x projects\New folder\ROW_DATA.xlsx"), null, true),
+				    ProductSubcategory_Table = Source{[Item="ProductSubcategory",Kind="Table"]}[Data],
+				    #"Changed Type" = Table.TransformColumnTypes(ProductSubcategory_Table,{{"ProductSubcategoryKey", Int64.Type}, {"SubcategoryName", type text}, {"CategoryName", type text}})
+				in
+				    #"Changed Type"
+
+	annotation PBI_ResultType = Table
+

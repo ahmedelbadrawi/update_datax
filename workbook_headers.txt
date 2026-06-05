@@ -1,0 +1,45 @@
+Model directory: c:\Users\Ahmed Elbadrawy\Downloads\datax_update\update_datax\no1.SemanticModel\definition
+Workbook path: D:\work\projects\data x projects\New folder\ROW_DATA.xlsx
+Tables in model:
+ - Customer.tmdl
+ - DateTableTemplate_3388ec4d-112f-4723-a0f5-a3aa34f6e1af.tmdl
+ - Geography.tmdl
+ - LocalDateTable_48c1b41e-6b15-4848-bd06-707a7e72c3f4.tmdl
+ - LocalDateTable_4d6012b8-7bf2-4228-90d9-1d1629c1b93f.tmdl
+ - LocalDateTable_5a1ff29e-47e4-45a0-b193-de94024a258f.tmdl
+ - LocalDateTable_7c050121-23c8-41c5-9675-f26a5d33c2f4.tmdl
+ - LocalDateTable_9cf27755-9b11-45fe-8654-0dde946f1928.tmdl
+ - Product.tmdl
+ - ProductCostHistory.tmdl
+ - ProductSubcategory.tmdl
+ - Region.tmdl
+ - SalesDetails.tmdl
+ - SalesHeader.tmdl
+ - SalesReturns.tmdl
+Sheet: Sheet1 target: worksheets/sheet1.xml hits: 2
+ header: CustomerKey,GeographyKey,BusinessType,Customer,NumberEmployees,AnnualRevenue,YearOpened
+ matched: CustomerKey,GeographyKey
+Sheet: Sheet2 target: worksheets/sheet2.xml hits: 2
+ header: ProductKey,ProductSubcategoryKey,ProductName,Size,Detail
+ matched: ProductKey,ProductSubcategoryKey
+Sheet: Sheet3 target: worksheets/sheet3.xml hits: 7
+ header: GeographyKey,CityName,StateCode,StateName,CountryCode,CountryName,RegionKey
+ matched: GeographyKey,CityName,StateCode,StateName,CountryCode,CountryName,RegionKey
+Sheet: Sheet4 target: worksheets/sheet4.xml hits: 5
+ header: Year,MonthNo,CountryCode,ProductKey,UnitCost
+ matched: Year,MonthNo,CountryCode,ProductKey,UnitCost
+Sheet: Sheet5 target: worksheets/sheet5.xml hits: 3
+ header: ProductSubcategoryKey,SubcategoryName,CategoryName
+ matched: ProductSubcategoryKey,SubcategoryName,CategoryName
+Sheet: Sheet6 target: worksheets/sheet6.xml hits: 3
+ header: RegionKey,Region,Country,Continent
+ matched: RegionKey,Region,Continent
+Sheet: Sheet7 target: worksheets/sheet7.xml hits: 8
+ header: SalesDetailsKey,SalesHeaderKey,SalesOrderNumber,ProductKey,ProductSubcategoryKey,OrderQuantity,UnitPrice,ExtendedAmount
+ matched: SalesDetailsKey,SalesHeaderKey,SalesOrderNumber,ProductKey,ProductSubcategoryKey,OrderQuantity,UnitPrice,ExtendedAmount
+Sheet: Sheet8 target: worksheets/sheet8.xml hits: 4
+ header: SalesHeaderKey,SalesOrderNumber,OrderDate,DueDate,ShipDate,CustomerKey,RegionKey,DiscountAmount,TotalAmount,SalesAmount
+ matched: SalesHeaderKey,SalesOrderNumber,CustomerKey,RegionKey
+Sheet: Sheet9 target: worksheets/sheet9.xml hits: 4
+ header: ReturnKey,ReturnDate,OrderDate,SalesOrderNumber,CustomerKey,ProductKey,ReturnQuantity,UnitPrice,ReturnAmount
+ matched: SalesOrderNumber,CustomerKey,ProductKey,UnitPrice

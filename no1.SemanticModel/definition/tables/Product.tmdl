@@ -1,0 +1,74 @@
+table Product
+	lineageTag: ae257b8a-9d87-47e5-8b76-bd5d86496d7f
+
+	column ProductKey
+		dataType: int64
+		formatString: 0
+		lineageTag: 7af695c8-2cbe-4406-96ff-2f40d01638bb
+		summarizeBy: count
+		sourceColumn: ProductKey
+
+		annotation SummarizationSetBy = Automatic
+
+	column ProductSubcategoryKey
+		dataType: int64
+		formatString: 0
+		lineageTag: 2fe8a783-a760-48f3-b230-dbd3a01f7b58
+		summarizeBy: count
+		sourceColumn: ProductSubcategoryKey
+
+		annotation SummarizationSetBy = Automatic
+
+	column ProductName
+		dataType: string
+		lineageTag: a6343494-086f-4b38-973e-bc4097284537
+		summarizeBy: none
+		sourceColumn: ProductName
+
+		annotation SummarizationSetBy = Automatic
+
+	column Size
+		dataType: string
+		lineageTag: 803c2f4f-6fc7-4e40-836f-a4bfafcf8e5a
+		summarizeBy: none
+		sourceColumn: Size
+
+		annotation SummarizationSetBy = Automatic
+
+	column Detail
+		dataType: string
+		lineageTag: 16794dd7-1ab3-4302-8a9c-1a16471c5d40
+		summarizeBy: none
+		sourceColumn: Detail
+
+		annotation SummarizationSetBy = Automatic
+
+	column SubcategoryName
+		dataType: string
+		lineageTag: 3a29e382-8fe8-43d7-b834-1c1f10f0dc36
+		summarizeBy: none
+		sourceColumn: SubcategoryName
+
+		annotation SummarizationSetBy = Automatic
+
+	column CategoryName
+		dataType: string
+		lineageTag: 5c421d09-a6cd-4b86-9007-2fd9e1b52560
+		summarizeBy: none
+		sourceColumn: CategoryName
+
+		annotation SummarizationSetBy = Automatic
+
+	partition Product = m
+		mode: import
+		source =
+			let
+				Source = Excel.Workbook(File.Contents("D:\work\projects\data x projects\New folder\ROW_DATA.xlsx"), null, true),
+				Product_Table = Source{[Item="Product",Kind="Table"]}[Data],
+				#"Changed Type" = Table.TransformColumnTypes(Product_Table,{{"ProductKey", Int64.Type}, {"ProductSubcategoryKey", Int64.Type}, {"ProductName", type text}, {"Size", type text}, {"Detail", type text}}),
+				ProductSubcategory_Table = Source{[Item="ProductSubcategory",Kind="Table"]}[Data],
+				#"Changed Type ProductSubcategory" = Table.TransformColumnTypes(ProductSubcategory_Table,{{"ProductSubcategoryKey", Int64.Type}, {"SubcategoryName", type text}, {"CategoryName", type text}}),
+				#"Merged ProductSubcategory" = Table.NestedJoin(#"Changed Type", {"ProductSubcategoryKey"}, #"Changed Type ProductSubcategory", {"ProductSubcategoryKey"}, "ProductSubcategory", JoinKind.LeftOuter),
+				#"Expanded ProductSubcategory" = Table.ExpandTableColumn(#"Merged ProductSubcategory", "ProductSubcategory", {"SubcategoryName", "CategoryName"}, {"SubcategoryName", "CategoryName"})
+			in
+				#"Expanded ProductSubcategory"

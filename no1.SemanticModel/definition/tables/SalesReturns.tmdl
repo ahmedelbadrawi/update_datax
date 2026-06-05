@@ -1,0 +1,111 @@
+table SalesReturns
+	lineageTag: 8381e368-5ede-4b75-9aee-e4d7544339a8
+
+	column ReturnKey
+		dataType: int64
+		formatString: 0
+		lineageTag: 4cc5d17b-046a-4046-8fb8-5d2cfb0c716b
+		summarizeBy: count
+		sourceColumn: ReturnKey
+
+		annotation SummarizationSetBy = Automatic
+
+	column ReturnDate
+		dataType: dateTime
+		formatString: Long Date
+		lineageTag: c8952799-fb56-4824-8c39-13eac8dfcc16
+		summarizeBy: none
+		sourceColumn: ReturnDate
+
+		variation Variation
+			isDefault
+			relationship: ab13aa62-2bba-4dd4-b5b1-da3c1dde4808
+			defaultHierarchy: LocalDateTable_4d6012b8-7bf2-4228-90d9-1d1629c1b93f.'Date Hierarchy'
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column OrderDate
+		dataType: dateTime
+		formatString: Long Date
+		lineageTag: 9d930bb5-2f43-4919-b01d-95b41be889d5
+		summarizeBy: none
+		sourceColumn: OrderDate
+
+		variation Variation
+			isDefault
+			relationship: 4d9238cf-2447-4eb4-99c1-db1cf5b2600d
+			defaultHierarchy: LocalDateTable_5a1ff29e-47e4-45a0-b193-de94024a258f.'Date Hierarchy'
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column SalesOrderNumber
+		dataType: string
+		lineageTag: 845e5aff-4104-4f2f-89bf-d2117444a073
+		summarizeBy: none
+		sourceColumn: SalesOrderNumber
+
+		annotation SummarizationSetBy = Automatic
+
+	column CustomerKey
+		dataType: int64
+		formatString: 0
+		lineageTag: 0e60ee18-2249-405b-960a-fe695056742f
+		summarizeBy: count
+		sourceColumn: CustomerKey
+
+		annotation SummarizationSetBy = Automatic
+
+	column ProductKey
+		dataType: int64
+		formatString: 0
+		lineageTag: e52adc0d-a633-4bca-b75a-6334404eccb4
+		summarizeBy: count
+		sourceColumn: ProductKey
+
+		annotation SummarizationSetBy = Automatic
+
+	column ReturnQuantity
+		dataType: int64
+		formatString: 0
+		lineageTag: bec1c3bf-eefd-4fe8-9cb8-32adbd8359ea
+		summarizeBy: sum
+		sourceColumn: ReturnQuantity
+
+		annotation SummarizationSetBy = Automatic
+
+	column UnitPrice
+		dataType: double
+		lineageTag: 1d07fe13-3f26-4a22-a66d-4cfaa231914a
+		summarizeBy: sum
+		sourceColumn: UnitPrice
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column ReturnAmount
+		dataType: double
+		lineageTag: 98478977-45f0-4b3f-874c-5fb31eab3a50
+		summarizeBy: sum
+		sourceColumn: ReturnAmount
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	partition SalesReturns = m
+		mode: import
+		source =
+				let
+				    Source = Excel.Workbook(File.Contents("D:\work\projects\data x projects\New folder\ROW_DATA.xlsx"), null, true),
+				    SalesReturns_Table = Source{[Item="SalesReturns",Kind="Table"]}[Data],
+				    #"Changed Type" = Table.TransformColumnTypes(SalesReturns_Table,{{"ReturnKey", Int64.Type}, {"ReturnDate", type date}, {"OrderDate", type date}, {"SalesOrderNumber", type text}, {"CustomerKey", Int64.Type}, {"ProductKey", Int64.Type}, {"ReturnQuantity", Int64.Type}, {"UnitPrice", type number}, {"ReturnAmount", type number}})
+				in
+				    #"Changed Type"
+
+	annotation PBI_ResultType = Table
+

@@ -1,0 +1,48 @@
+table Region
+	lineageTag: efafc8ca-beaa-438a-85da-2934c6e845ad
+
+	column RegionKey
+		dataType: int64
+		formatString: 0
+		lineageTag: 9f714335-f0b2-474f-9d8a-c3af54f16faf
+		summarizeBy: count
+		sourceColumn: RegionKey
+
+		annotation SummarizationSetBy = Automatic
+
+	column Region
+		dataType: string
+		lineageTag: 9e573118-7fbe-42f6-874d-36bad1fa313e
+		summarizeBy: none
+		sourceColumn: Region
+
+		annotation SummarizationSetBy = Automatic
+
+	column Country
+		dataType: string
+		lineageTag: d399e0f8-b106-40f5-94df-f0c0d177e790
+		summarizeBy: none
+		sourceColumn: Country
+
+		annotation SummarizationSetBy = Automatic
+
+	column Continent
+		dataType: string
+		lineageTag: d82ef811-063f-4175-8c57-f88677456844
+		summarizeBy: none
+		sourceColumn: Continent
+
+		annotation SummarizationSetBy = Automatic
+
+	partition Region = m
+		mode: import
+		source =
+				let
+				    Source = Excel.Workbook(File.Contents("D:\work\projects\data x projects\New folder\ROW_DATA.xlsx"), null, true),
+				    Region_Table = Source{[Item="Region",Kind="Table"]}[Data],
+				    #"Changed Type" = Table.TransformColumnTypes(Region_Table,{{"RegionKey", Int64.Type}, {"Region", type text}, {"Country", type text}, {"Continent", type text}})
+				in
+				    #"Changed Type"
+
+	annotation PBI_ResultType = Table
+

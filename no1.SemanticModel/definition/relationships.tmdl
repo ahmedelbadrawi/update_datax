@@ -1,0 +1,41 @@
+relationship f21fa7c1-e56f-4bd5-839a-c392ec2df77d
+	joinOnDateBehavior: datePartOnly
+	fromColumn: SalesHeader.OrderDate
+	toColumn: LocalDateTable_9cf27755-9b11-45fe-8654-0dde946f1928.Date
+
+relationship c7cfec8d-acbd-41e3-bb2c-bdb38656c335
+	joinOnDateBehavior: datePartOnly
+	fromColumn: SalesHeader.DueDate
+	toColumn: LocalDateTable_7c050121-23c8-41c5-9675-f26a5d33c2f4.Date
+
+relationship 16429023-208d-4a21-ad77-b40f20bd9ff9
+	joinOnDateBehavior: datePartOnly
+	fromColumn: SalesHeader.ShipDate
+	toColumn: LocalDateTable_48c1b41e-6b15-4848-bd06-707a7e72c3f4.Date
+
+relationship ab13aa62-2bba-4dd4-b5b1-da3c1dde4808
+	joinOnDateBehavior: datePartOnly
+	fromColumn: SalesReturns.ReturnDate
+	toColumn: LocalDateTable_4d6012b8-7bf2-4228-90d9-1d1629c1b93f.Date
+
+relationship 4d9238cf-2447-4eb4-99c1-db1cf5b2600d
+	joinOnDateBehavior: datePartOnly
+	fromColumn: SalesReturns.OrderDate
+	toColumn: LocalDateTable_5a1ff29e-47e4-45a0-b193-de94024a258f.Date
+
+relationship 06fb5de6-9d64-4d7c-8a99-45c1c77ca5d1
+	fromColumn: SalesReturns.CustomerKey
+	toColumn: Customer.CustomerKey
+
+relationship b3af3e59-e36d-4d1f-9c7d-e1fb8ecfd355
+	fromColumn: SalesReturns.ProductKey
+	toColumn: Product.ProductKey
+
+relationship 2f3b1d4a-bc51-47ea-91c2-9b8d3a761aa0
+	fromColumn: SalesDetails.ProductKey
+	toColumn: Product.ProductKey
+
+relationship 8186d2fe-8421-4fea-b1df-7f2b91c3b66a
+	fromColumn: SalesDetails.CustomerKey
+	toColumn: Customer.CustomerKey
+

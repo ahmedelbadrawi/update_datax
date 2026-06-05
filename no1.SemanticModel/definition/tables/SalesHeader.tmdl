@@ -1,0 +1,128 @@
+table SalesHeader
+	lineageTag: ea9ea1aa-db91-4d9a-9e6e-2ba3375cee97
+
+	column SalesHeaderKey
+		dataType: int64
+		formatString: 0
+		lineageTag: e3bc74ab-0ca6-4241-b340-aa119bb9abec
+		summarizeBy: count
+		sourceColumn: SalesHeaderKey
+
+		annotation SummarizationSetBy = Automatic
+
+	column SalesOrderNumber
+		dataType: string
+		lineageTag: 4728f613-9cc2-4ddc-bd28-6e81b8b78b25
+		summarizeBy: none
+		sourceColumn: SalesOrderNumber
+
+		annotation SummarizationSetBy = Automatic
+
+	column OrderDate
+		dataType: dateTime
+		formatString: Long Date
+		lineageTag: 9dac694e-7cde-4e29-a107-d3449b707f2d
+		summarizeBy: none
+		sourceColumn: OrderDate
+
+		variation Variation
+			isDefault
+			relationship: f21fa7c1-e56f-4bd5-839a-c392ec2df77d
+			defaultHierarchy: LocalDateTable_9cf27755-9b11-45fe-8654-0dde946f1928.'Date Hierarchy'
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column DueDate
+		dataType: dateTime
+		formatString: Long Date
+		lineageTag: 5d323ef1-440d-4e8c-8531-0d927857b67a
+		summarizeBy: none
+		sourceColumn: DueDate
+
+		variation Variation
+			isDefault
+			relationship: c7cfec8d-acbd-41e3-bb2c-bdb38656c335
+			defaultHierarchy: LocalDateTable_7c050121-23c8-41c5-9675-f26a5d33c2f4.'Date Hierarchy'
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column ShipDate
+		dataType: dateTime
+		formatString: Long Date
+		lineageTag: de646e62-07d9-456a-b9fe-256655ba0a20
+		summarizeBy: none
+		sourceColumn: ShipDate
+
+		variation Variation
+			isDefault
+			relationship: 16429023-208d-4a21-ad77-b40f20bd9ff9
+			defaultHierarchy: LocalDateTable_48c1b41e-6b15-4848-bd06-707a7e72c3f4.'Date Hierarchy'
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column CustomerKey
+		dataType: int64
+		formatString: 0
+		lineageTag: 3e5a4e82-232a-4110-97f4-02784c7af01d
+		summarizeBy: count
+		sourceColumn: CustomerKey
+
+		annotation SummarizationSetBy = Automatic
+
+	column RegionKey
+		dataType: int64
+		formatString: 0
+		lineageTag: 465641b0-ffc7-4b6a-a9a3-e2c324b11bda
+		summarizeBy: count
+		sourceColumn: RegionKey
+
+		annotation SummarizationSetBy = Automatic
+
+	column DiscountAmount
+		dataType: double
+		lineageTag: 25d2b5c9-281e-465a-808d-6f079aafced8
+		summarizeBy: sum
+		sourceColumn: DiscountAmount
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column TotalAmount
+		dataType: double
+		lineageTag: 83b96c73-31ba-4bcf-be73-8085484517f9
+		summarizeBy: sum
+		sourceColumn: TotalAmount
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column SalesAmount
+		dataType: double
+		lineageTag: f1ad51ec-998f-45df-98fa-2e97793fa0bb
+		summarizeBy: sum
+		sourceColumn: SalesAmount
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	partition SalesHeader = m
+		mode: import
+		source =
+				let
+				    Source = Excel.Workbook(File.Contents("D:\work\projects\data x projects\New folder\ROW_DATA.xlsx"), null, true),
+				    SalesHeader_Table = Source{[Item="SalesHeader",Kind="Table"]}[Data],
+				    #"Changed Type" = Table.TransformColumnTypes(SalesHeader_Table,{{"SalesHeaderKey", Int64.Type}, {"SalesOrderNumber", type text}, {"OrderDate", type date}, {"DueDate", type date}, {"ShipDate", type date}, {"CustomerKey", Int64.Type}, {"RegionKey", Int64.Type}, {"DiscountAmount", type number}, {"TotalAmount", type number}, {"SalesAmount", type number}})
+				in
+				    #"Changed Type"
+
+	annotation PBI_ResultType = Table
+

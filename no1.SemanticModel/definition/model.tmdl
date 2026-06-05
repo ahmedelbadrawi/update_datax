@@ -1,0 +1,32 @@
+model Model
+	culture: en-US
+	defaultPowerBIDataSourceVersion: powerBI_V3
+	sourceQueryCulture: en-US
+	dataAccessOptions
+		legacyRedirects
+		returnErrorValuesAsNull
+
+annotation __PBI_TimeIntelligenceEnabled = 1
+
+annotation PBI_QueryOrder = ["Customer","Geography","Product","ProductCostHistory","ProductSubcategory","Region","SalesDetails","SalesHeader","SalesReturns"]
+
+annotation PBI_ProTooling = ["DevMode","TMDL-Extension"]
+
+ref table Customer
+ref table Geography
+ref table Product
+ref table ProductCostHistory
+ref table ProductSubcategory
+ref table Region
+ref table SalesDetails
+ref table SalesHeader
+ref table DateTableTemplate_3388ec4d-112f-4723-a0f5-a3aa34f6e1af
+ref table LocalDateTable_9cf27755-9b11-45fe-8654-0dde946f1928
+ref table LocalDateTable_7c050121-23c8-41c5-9675-f26a5d33c2f4
+ref table LocalDateTable_48c1b41e-6b15-4848-bd06-707a7e72c3f4
+ref table SalesReturns
+ref table LocalDateTable_4d6012b8-7bf2-4228-90d9-1d1629c1b93f
+ref table LocalDateTable_5a1ff29e-47e4-45a0-b193-de94024a258f
+
+ref cultureInfo en-US
+

@@ -1,0 +1,221 @@
+table SalesDetails
+	lineageTag: 27c25d32-750b-401a-aeaf-0e4e19412851
+
+	column SalesDetailsKey
+		dataType: int64
+		formatString: 0
+		lineageTag: 4a1ad60d-a826-4081-a083-942ddd15a1d4
+		summarizeBy: count
+		sourceColumn: SalesDetailsKey
+
+		annotation SummarizationSetBy = Automatic
+
+	column SalesHeaderKey
+		dataType: int64
+		formatString: 0
+		lineageTag: f897fe32-562e-47a2-a468-44271a444648
+		summarizeBy: count
+		sourceColumn: SalesHeaderKey
+
+		annotation SummarizationSetBy = Automatic
+
+	column SalesOrderNumber
+		dataType: string
+		lineageTag: bcaa5bf6-4f1f-4ead-a0a5-25f5bc7c9c9e
+		summarizeBy: none
+		sourceColumn: SalesOrderNumber
+
+		annotation SummarizationSetBy = Automatic
+
+	column ProductKey
+		dataType: int64
+		formatString: 0
+		lineageTag: 8b5f294e-a2c9-4c40-b695-5a99f052f0f4
+		summarizeBy: count
+		sourceColumn: ProductKey
+
+		annotation SummarizationSetBy = Automatic
+
+	column ProductSubcategoryKey
+		dataType: int64
+		formatString: 0
+		lineageTag: 65df8cf7-9685-4a21-ace2-69d7812a4f62
+		summarizeBy: count
+		sourceColumn: ProductSubcategoryKey
+
+		annotation SummarizationSetBy = Automatic
+
+	column OrderQuantity
+		dataType: int64
+		formatString: 0
+		lineageTag: eb6692b8-823f-4fd2-b6d4-70d7c8156ecc
+		summarizeBy: sum
+		sourceColumn: OrderQuantity
+
+		annotation SummarizationSetBy = Automatic
+
+	column UnitPrice
+		dataType: double
+		lineageTag: 50bab71c-01bd-4495-a235-a4535880b04e
+		summarizeBy: sum
+		sourceColumn: UnitPrice
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column ExtendedAmount
+		dataType: double
+		lineageTag: 4336f5dc-afd6-4d1f-ae06-e1b8475e0f28
+		summarizeBy: sum
+		sourceColumn: ExtendedAmount
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column OrderDate
+		dataType: dateTime
+		formatString: Long Date
+		lineageTag: 2b5e4bae-3162-4a3f-80ea-2b9736bf7a3d
+		summarizeBy: none
+		sourceColumn: OrderDate
+
+		annotation SummarizationSetBy = Automatic
+
+	column DueDate
+		dataType: dateTime
+		formatString: Long Date
+		lineageTag: 5f5c3f7a-9b81-4dca-8c25-11db5bcf811e
+		summarizeBy: none
+		sourceColumn: DueDate
+
+		annotation SummarizationSetBy = Automatic
+
+	column ShipDate
+		dataType: dateTime
+		formatString: Long Date
+		lineageTag: 7c586d4c-1f56-4d53-9f78-5f3a93026a0d
+		summarizeBy: none
+		sourceColumn: ShipDate
+
+		annotation SummarizationSetBy = Automatic
+
+	column CustomerKey
+		dataType: int64
+		formatString: 0
+		lineageTag: 80a4b66f-d19e-4704-bc62-49e1c1e881af
+		summarizeBy: count
+		sourceColumn: CustomerKey
+
+		annotation SummarizationSetBy = Automatic
+
+	column GeographyKey
+		dataType: int64
+		formatString: 0
+		lineageTag: 5f7e72cd-1c98-4a87-988a-3f4662f0ca95
+		summarizeBy: count
+		sourceColumn: GeographyKey
+
+		annotation SummarizationSetBy = Automatic
+
+	column RegionKey
+		dataType: int64
+		formatString: 0
+		lineageTag: bc1c5d7d-c4d9-4734-9d29-8fce48f7b5ae
+		summarizeBy: count
+		sourceColumn: RegionKey
+
+		annotation SummarizationSetBy = Automatic
+
+	column DiscountAmount
+		dataType: double
+		lineageTag: dfa6b42f-1cbf-41ed-b07c-0dd7efbffd13
+		summarizeBy: sum
+		sourceColumn: DiscountAmount
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column TotalAmount
+		dataType: double
+		lineageTag: 4e201e3c-788f-45a7-8f31-0b3b980fa09e
+		summarizeBy: sum
+		sourceColumn: TotalAmount
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column SalesAmount
+		dataType: double
+		lineageTag: 8d3c4a4b-8d92-4c8d-8e95-22dd82d4f1d8
+		summarizeBy: sum
+		sourceColumn: SalesAmount
+
+		annotation SummarizationSetBy = Automatic
+
+	column CountryCode
+		dataType: string
+		lineageTag: 06c3c690-4d07-4b34-9d8c-2d92b7f48197
+		summarizeBy: none
+		sourceColumn: CountryCode
+
+		annotation SummarizationSetBy = Automatic
+
+	column Year
+		dataType: int64
+		formatString: 0
+		lineageTag: 1d3f8fda-3b92-4ae6-b560-2fa2f5474b47
+		summarizeBy: count
+		sourceColumn: Year
+
+		annotation SummarizationSetBy = Automatic
+
+	column Month
+		dataType: int64
+		formatString: 0
+		lineageTag: 9e3f7f34-2c15-4864-ba2b-c403c9b4f842
+		summarizeBy: count
+		sourceColumn: Month
+
+		annotation SummarizationSetBy = Automatic
+
+	column UnitCost
+		dataType: double
+		lineageTag: 14a07c92-735a-421b-8a22-dca87c6d6a47
+		summarizeBy: sum
+		sourceColumn: UnitCost
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	partition SalesDetails = m
+		mode: import
+		source =
+			let
+				Source = Excel.Workbook(File.Contents("D:\work\projects\data x projects\New folder\ROW_DATA.xlsx"), null, true),
+				SalesDetails_Table = Source{[Item="SalesDetails",Kind="Table"]}[Data],
+				#"Changed Type" = Table.TransformColumnTypes(SalesDetails_Table,{{"SalesDetailsKey", Int64.Type}, {"SalesHeaderKey", Int64.Type}, {"SalesOrderNumber", type text}, {"ProductKey", Int64.Type}, {"ProductSubcategoryKey", Int64.Type}, {"OrderQuantity", Int64.Type}, {"UnitPrice", type number}, {"ExtendedAmount", type number}}),
+				SalesHeader_Table = Source{[Item="SalesHeader",Kind="Table"]}[Data],
+				#"Changed Type SalesHeader" = Table.TransformColumnTypes(SalesHeader_Table,{{"SalesHeaderKey", Int64.Type}, {"SalesOrderNumber", type text}, {"OrderDate", type date}, {"DueDate", type date}, {"ShipDate", type date}, {"CustomerKey", Int64.Type}, {"RegionKey", Int64.Type}, {"DiscountAmount", type number}, {"TotalAmount", type number}, {"SalesAmount", type number}}),
+				#"Merged SalesHeader" = Table.NestedJoin(#"Changed Type", {"SalesOrderNumber"}, #"Changed Type SalesHeader", {"SalesOrderNumber"}, "SalesHeader", JoinKind.LeftOuter),
+				#"Expanded SalesHeader" = Table.ExpandTableColumn(#"Merged SalesHeader", "SalesHeader", {"OrderDate","DueDate","ShipDate","CustomerKey","RegionKey","DiscountAmount","TotalAmount","SalesAmount"}, {"OrderDate","DueDate","ShipDate","CustomerKey","RegionKey","DiscountAmount","TotalAmount","SalesAmount"}),
+				Customer_Table = Source{[Item="Customer",Kind="Table"]}[Data],
+				#"Changed Type Customer" = Table.TransformColumnTypes(Customer_Table,{{"CustomerKey", Int64.Type}, {"GeographyKey", Int64.Type}, {"BusinessType", type text}, {"Customer", type text}, {"NumberEmployees", Int64.Type}, {"AnnualRevenue", Int64.Type}, {"YearOpened", Int64.Type}}),
+				#"Merged Customer" = Table.NestedJoin(#"Expanded SalesHeader", {"CustomerKey"}, #"Changed Type Customer", {"CustomerKey"}, "Customer", JoinKind.LeftOuter),
+				#"Expanded Customer" = Table.ExpandTableColumn(#"Merged Customer", "Customer", {"GeographyKey"}, {"GeographyKey"}),
+				Geography_Table = Source{[Item="Geography",Kind="Table"]}[Data],
+				#"Changed Type Geography" = Table.TransformColumnTypes(Geography_Table,{{"GeographyKey", Int64.Type}, {"CountryCode", type text}}),
+				#"Merged Geography" = Table.NestedJoin(#"Expanded Customer", {"GeographyKey"}, #"Changed Type Geography", {"GeographyKey"}, "Geography", JoinKind.LeftOuter),
+				#"Expanded Geography" = Table.ExpandTableColumn(#"Merged Geography", "Geography", {"CountryCode"}, {"CountryCode"}),
+				#"Added Year" = Table.AddColumn(#"Expanded Geography", "Year", each Date.Year([OrderDate]), Int64.Type),
+				#"Added Month" = Table.AddColumn(#"Added Year", "Month", each Date.Month([OrderDate]), Int64.Type),
+				ProductCostHistory_Table = Source{[Item="ProductCostHistory",Kind="Table"]}[Data],
+				#"Changed Type ProductCostHistory" = Table.TransformColumnTypes(ProductCostHistory_Table,{{"Year", Int64.Type}, {"MonthNo", Int64.Type}, {"CountryCode", type text}, {"ProductKey", Int64.Type}, {"UnitCost", type number}}),
+				#"Merged ProductCostHistory" = Table.NestedJoin(#"Added Month", {"Year","Month","CountryCode","ProductKey"}, #"Changed Type ProductCostHistory", {"Year","MonthNo","CountryCode","ProductKey"}, "ProductCostHistory", JoinKind.LeftOuter),
+				#"Expanded ProductCostHistory" = Table.ExpandTableColumn(#"Merged ProductCostHistory", "ProductCostHistory", {"UnitCost"}, {"UnitCost"})
+			in
+			#"Expanded ProductCostHistory"
